@@ -23,8 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter, useParams } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
-import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
@@ -43,17 +41,16 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit billbaord" : "Create billboard";
-  const descripton = initialData ? "Edit a billbaord" : "Add a new billboard";
+  const title = initialData ? "Edit Billbaord" : "Create Billboard";
+  const descripton = initialData ? "Edit a Billbaord" : "Add a New Billboard";
   const toastMessage = initialData
-    ? "Billbaord updated."
-    : "Billboard created.";
-  const action = initialData ? "Save changes" : "Create";
+    ? "Billbaord Updated."
+    : "Billboard Created.";
+  const action = initialData ? "Save Changes" : "Create";
 
   const form = useForm<BillboardFormValue>({
     resolver: zodResolver(formSchema),
@@ -90,7 +87,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       await axios.delete(
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
-      router.push("/");
+      router.push(`/${params.storeId}/billboards`);
       toast.success("Billboard deleted successfully");
       router.refresh();
     } catch (error) {
@@ -172,7 +169,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           </Button>
         </form>
       </Form>
-      <Separator />
     </>
   );
 };
