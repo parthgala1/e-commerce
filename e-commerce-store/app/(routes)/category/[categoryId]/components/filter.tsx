@@ -12,7 +12,7 @@ interface FilterProps {
   valueKey: string;
 }
 
-const FIlter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
+const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -23,22 +23,15 @@ const FIlter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
 
     const query = {
       ...current,
-      [valueKey]: id,
+      [valueKey]: current[valueKey] === id ? undefined : id,
     };
 
-    if (current[valueKey] === id) {
-      query[valueKey] = null;
-    }
+    const newUrl = qs.stringifyUrl({
+      url: window.location.href.split('?')[0], // Ensure the base URL is used
+      query,
+    }, { skipNull: true });
 
-    const url = qs.stringify(
-      {
-        url: window.location.href,
-        query,
-      },
-      { skipNull: true }
-    );
-
-    router.push(url);
+    router.push(newUrl);
   };
 
   return (
@@ -64,4 +57,4 @@ const FIlter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
   );
 };
 
-export default FIlter;
+export default Filter;
